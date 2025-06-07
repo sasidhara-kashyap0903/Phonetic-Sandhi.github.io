@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phonetic Sandhi Word Combiner</title>
+    <title>Sandhi Word Combiner</title>
     <!-- Tailwind CSS for responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -17,36 +17,46 @@
             border: 4px solid #f3f3f3; /* Light grey */
             border-top: 4px solid #3498db; /* Blue */
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 2s linear infinite;
+            width: 20px; /* Slightly smaller loader */
+            height: 20px;
+            animation: spin 1s linear infinite;
             display: inline-block;
             vertical-align: middle;
-            margin-left: 8px;
+            margin-left: 12px; /* Increased margin */
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Basic transition for result display */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Phonetic Sandhi Word Combiner</h1>
+<body class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Sandhi Word Combiner</h1>
 
         <!-- Input for the first word -->
         <div class="mb-4">
             <label for="firstWord" class="block text-gray-700 text-sm font-semibold mb-2">First Word:</label>
-            <input type="text" id="firstWord" placeholder="Enter the first word"
-                   class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out">
+            <input type="text" id="firstWord" placeholder="Enter the first word (Only Sanskrit)"
+                   class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
         </div>
 
         <!-- Input for the second word -->
         <div class="mb-6">
             <label for="secondWord" class="block text-gray-700 text-sm font-semibold mb-2">Second Word:</label>
-            <input type="text" id="secondWord" placeholder="Enter the second word"
-                   class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out">
+            <input type="text" id="secondWord" placeholder="Enter the second word (Only Sanskrit)"
+                   class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
         </div>
 
         <!-- Button to perform sandhi operation -->
@@ -57,19 +67,28 @@
         </button>
 
         <!-- Display area for the sandhi result -->
-        <div class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div id="resultContainer" class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden fade-in">
             <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result:</p>
-            <p id="sandhiResult" class="text-xl font-bold text-blue-800 break-words mb-4"></p>
+            <p id="sandhiResult" class="text-2xl font-extrabold text-blue-800 break-words mb-4"></p>
+
+            <!-- New element for Sandhi Meaning -->
+            <p class="text-gray-700 text-sm font-semibold mb-2">Meaning (English):</p>
+            <p id="sandhiMeaning" class="text-lg text-gray-700 break-words mb-4"></p>
 
             <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Type:</p>
             <p id="sandhiType" class="text-lg text-gray-700 break-words mb-4"></p>
 
-            <!-- New elements for Sutra Name and Number -->
             <p class="text-gray-700 text-sm font-semibold mb-2">Ashtadhyayi Sutra Name:</p>
             <p id="sutraName" class="text-lg text-gray-700 break-words mb-4"></p>
 
             <p class="text-gray-700 text-sm font-semibold mb-2">Ashtadhyayi Sutra Number:</p>
             <p id="sutraNumber" class="text-lg text-gray-700 break-words"></p>
+
+            <!-- Copy to clipboard button -->
+            <button id="copyButton"
+                    class="mt-4 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
+                Copy Result
+            </button>
         </div>
 
         <!-- Message box for errors or important info -->
@@ -84,9 +103,12 @@
         const secondWordInput = document.getElementById('secondWord');
         const combineButton = document.getElementById('combineButton');
         const sandhiResultDisplay = document.getElementById('sandhiResult');
+        const sandhiMeaningDisplay = document.getElementById('sandhiMeaning');
         const sandhiTypeDisplay = document.getElementById('sandhiType');
-        const sutraNameDisplay = document.getElementById('sutraName');     // New element
-        const sutraNumberDisplay = document.getElementById('sutraNumber'); // New element
+        const sutraNameDisplay = document.getElementById('sutraName');
+        const sutraNumberDisplay = document.getElementById('sutraNumber');
+        const resultContainer = document.getElementById('resultContainer');
+        const copyButton = document.getElementById('copyButton');
         const messageBox = document.getElementById('messageBox');
         const loadingIndicator = document.getElementById('loadingIndicator');
 
@@ -117,19 +139,20 @@
         /**
          * Performs a sandhi operation by calling the Gemini API to simulate
          * a backend processing the words with a sandhi module,
-         * requesting result, type, sutra name, and sutra number.
+         * requesting result, type, sutra name, and sutra number, and meaning.
          * @param {string} word1 The first word.
          * @param {string} word2 The second word.
-         * @returns {Promise<object>} A promise that resolves with an object containing sandhiResult, sandhiType, sutraName, and sutraNumber.
+         * @returns {Promise<object>} A promise that resolves with an object containing sandhiResult, sandhiMeaning, sandhiType, sutraName, and sutraNumber.
          */
         async function performSandhi(word1, word2) {
             loadingIndicator.classList.remove('hidden'); // Show loader
             combineButton.disabled = true; // Disable button
+            resultContainer.classList.add('hidden'); // Hide results while calculating
 
             try {
                 let chatHistory = [];
                 // Prompt the LLM to act as a sandhi calculator and return JSON
-                const prompt = `Perform Sanskrit sandhi for the words "${word1}" and "${word2}". Provide the combined sandhi word, the type of sandhi (e.g., Vowel Sandhi, Consonant Sandhi, Visarga Sandhi), and if applicable, the Ashtadhyayi Sutra name and number that governs this sandhi. Return the response in a JSON object with keys "sandhiResult", "sandhiType", "sutraName", and "sutraNumber". If a sutra is not directly applicable or known, use "N/A" for its values. Do not include any other text or explanation outside the JSON.`;
+                const prompt = `Perform Sanskrit sandhi for the words "${word1}" and "${word2}". Provide the combined sandhi word, its English meaning, the type of sandhi (e.g., Vowel Sandhi, Consonant Sandhi, Visarga Sandhi), and if applicable, the Ashtadhyayi Sutra name and number that governs this sandhi. Return the response in a JSON object with keys "sandhiResult", "sandhiMeaning", "sandhiType", "sutraName", and "sutraNumber". If a sutra or meaning is not directly applicable or known, use "N/A" for its values. Do not include any other text or explanation outside the JSON.`;
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
                 const payload = {
@@ -140,11 +163,12 @@
                             type: "OBJECT",
                             properties: {
                                 "sandhiResult": { "type": "STRING" },
+                                "sandhiMeaning": { "type": "STRING" },
                                 "sandhiType": { "type": "STRING" },
-                                "sutraName": { "type": "STRING" },     // Added sutraName
-                                "sutraNumber": { "type": "STRING" }   // Added sutraNumber
+                                "sutraName": { "type": "STRING" },
+                                "sutraNumber": { "type": "STRING" }
                             },
-                            "propertyOrdering": ["sandhiResult", "sandhiType", "sutraName", "sutraNumber"] // Updated ordering
+                            "propertyOrdering": ["sandhiResult", "sandhiMeaning", "sandhiType", "sutraName", "sutraNumber"]
                         }
                     }
                 };
@@ -170,21 +194,21 @@
                     const jsonString = result.candidates[0].content.parts[0].text;
                     const parsedJson = JSON.parse(jsonString);
 
-                    // Ensure the expected properties exist, default to 'N/A' if not present
                     const sandhiResult = parsedJson.sandhiResult ? parsedJson.sandhiResult.trim() : 'N/A';
+                    const sandhiMeaning = parsedJson.sandhiMeaning ? parsedJson.sandhiMeaning.trim() : 'N/A';
                     const sandhiType = parsedJson.sandhiType ? parsedJson.sandhiType.trim() : 'N/A';
                     const sutraName = parsedJson.sutraName ? parsedJson.sutraName.trim() : 'N/A';
                     const sutraNumber = parsedJson.sutraNumber ? parsedJson.sutraNumber.trim() : 'N/A';
 
-                    return { sandhiResult, sandhiType, sutraName, sutraNumber };
+                    return { sandhiResult, sandhiMeaning, sandhiType, sutraName, sutraNumber };
                 } else {
                     showMessage('Unexpected response structure from the sandhi service.', 'error');
-                    return { sandhiResult: 'Error', sandhiType: 'N/A', sutraName: 'N/A', sutraNumber: 'N/A' };
+                    return { sandhiResult: 'Error', sandhiMeaning: 'N/A', sandhiType: 'N/A', sutraName: 'N/A', sutraNumber: 'N/A' };
                 }
             } catch (error) {
                 console.error('Error performing sandhi:', error);
                 showMessage(`Error: ${error.message}. Please try again.`, 'error');
-                return { sandhiResult: 'Error', sandhiType: 'N/A', sutraName: 'N/A', sutraNumber: 'N/A' };
+                return { sandhiResult: 'Error', sandhiMeaning: 'N/A', sandhiType: 'N/A', sutraName: 'N/A', sutraNumber: 'N/A' };
             } finally {
                 loadingIndicator.classList.add('hidden'); // Hide loader
                 combineButton.disabled = false; // Enable button
@@ -198,40 +222,76 @@
 
             if (!firstWord || !secondWord) {
                 sandhiResultDisplay.textContent = "";
+                sandhiMeaningDisplay.textContent = "";
                 sandhiTypeDisplay.textContent = "";
-                sutraNameDisplay.textContent = "";     // Clear sutra name
-                sutraNumberDisplay.textContent = "";   // Clear sutra number
+                sutraNameDisplay.textContent = "";
+                sutraNumberDisplay.textContent = "";
+                resultContainer.classList.add('hidden'); // Hide results
                 showMessage("Please enter both words to perform sandhi.", "error");
                 return;
             }
 
             sandhiResultDisplay.textContent = "Calculating...";
+            sandhiMeaningDisplay.textContent = "";
             sandhiTypeDisplay.textContent = "";
             sutraNameDisplay.textContent = "";
             sutraNumberDisplay.textContent = "";
             showMessage("Performing sandhi operation...", "info");
 
-            // Perform the sandhi operation via the simulated backend (Gemini API)
             const result = await performSandhi(firstWord, secondWord);
 
             if (result.sandhiResult.startsWith("Error")) {
                 sandhiResultDisplay.textContent = result.sandhiResult;
+                sandhiMeaningDisplay.textContent = result.sandhiMeaning;
                 sandhiTypeDisplay.textContent = result.sandhiType;
                 sutraNameDisplay.textContent = result.sutraName;
                 sutraNumberDisplay.textContent = result.sutraNumber;
+                resultContainer.classList.remove('hidden'); // Show container even on error
+                resultContainer.classList.add('fade-in');
             } else {
                 sandhiResultDisplay.textContent = result.sandhiResult;
+                sandhiMeaningDisplay.textContent = result.sandhiMeaning;
                 sandhiTypeDisplay.textContent = result.sandhiType;
                 sutraNameDisplay.textContent = result.sutraName;
                 sutraNumberDisplay.textContent = result.sutraNumber;
+                resultContainer.classList.remove('hidden'); // Show container
+                resultContainer.classList.add('fade-in');
                 showMessage("Sandhi operation completed!", "success");
             }
         });
 
-        // Ensure the layout is responsive on load and resize
+        // Add event listener for the copy button
+        copyButton.addEventListener('click', () => {
+            // Get all relevant text for copying, separated by newlines
+            const textToCopy = `Sandhi Result: ${sandhiResultDisplay.textContent}\n` +
+                               `Meaning: ${sandhiMeaningDisplay.textContent}\n` +
+                               `Sandhi Type: ${sandhiTypeDisplay.textContent}\n` +
+                               `Ashtadhyayi Sutra Name: ${sutraNameDisplay.textContent}\n` +
+                               `Ashtadhyayi Sutra Number: ${sutraNumberDisplay.textContent}`;
+
+            if (sandhiResultDisplay.textContent && sandhiResultDisplay.textContent !== 'N/A' && !sandhiResultDisplay.textContent.startsWith('Error')) {
+                // Use execCommand for broader compatibility within iframes
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessage('Result and details copied to clipboard!', 'success');
+                } catch (err) {
+                    console.error('Failed to copy text:', err);
+                    showMessage('Failed to copy. Please copy manually.', 'error');
+                }
+                document.body.removeChild(textarea);
+            } else {
+                showMessage('No result to copy.', 'info');
+            }
+        });
+
+        // Initial setup for responsive design
         window.addEventListener('load', () => {
-            // This setup using Tailwind classes inherently handles responsiveness
-            // No additional JS needed here unless for specific complex responsive logic
+            // Tailwind CSS classes handle most responsiveness directly.
+            // No additional JS needed here unless for specific complex responsive logic.
         });
     </script>
 </body>
