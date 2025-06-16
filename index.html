@@ -39,7 +39,11 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        #sandhiResult {
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
     <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
@@ -79,11 +83,9 @@
         <div id="resultContainer" class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden fade-in relative">
             <!-- Loading indicator -->
             <div id="loadingIndicator" class="loader hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
-            <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result (Sanskrit):</p>
             <p id="sandhiResult" class="text-2xl font-extrabold text-blue-800 break-words mb-4"></p>
-
-            <!-- New element for Sandhi Meaning -->
-            <p class="text-gray-700 text-sm font-semibold mb-2">English Meaning:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">Meaning (English):</p>
             <p id="sandhiMeaning" class="text-lg text-gray-700 break-words mb-4"></p>
 
             <p class="text-gray-700 text-sm font-semibold mb-2">Type of Sandhi:</p>
@@ -311,5 +313,14 @@
             , { passive: true });
         });
     </script>
+    <!-- Footer -->
+<footer class="mt-12 text-center text-gray-500 text-sm py-4 border-t border-gray-200 bg-white opacity-90 rounded-b-xl shadow-inner">
+    <div>
+        © 2025 Sandhi Word Combiner by Sasidhara-Kashyap0903. All rights reserved.
+    </div>
+    <div class="mt-1">
+        <a href="https://github.com/sasidhara-kashyap0903/Phonetic-Sandhi.github.io" class="text-blue-500 hover:underline">View on GitHub</a>
+    </div>
+</footer>
 </body>
 </html>`
