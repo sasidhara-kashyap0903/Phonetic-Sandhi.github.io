@@ -11,7 +11,7 @@ This project provides a simple web-based tool to combine two Sanskrit words acco
 
 ## Project Structure
 
-- `index.html`: Contains the HTML structure, CSS styling (using Tailwind CSS), and JavaScript logic for the Sandhi Word Combiner.
+`index.html`: Contains the HTML structure, CSS styling (using Tailwind CSS), and JavaScript logic for the Sandhi Word Combiner.
 
 ## API Usage
 
