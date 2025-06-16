@@ -49,33 +49,44 @@
         <div class="mb-4">
             <label for="firstWord" class="block text-gray-700 text-sm font-semibold mb-2">First Word:</label>
             <input type="text" id="firstWord" placeholder="Enter the first word"
-                   class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
+ class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
+ <button class="clearButton absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 hover:text-gray-800 focus:outline-none" style="top: 50%; transform: translateY(-50%); right: 10px;">
+ <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+ <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd" />
+ </svg>
+ </button>
         </div>
 
         <!-- Input for the second word -->
         <div class="mb-6">
             <label for="secondWord" class="block text-gray-700 text-sm font-semibold mb-2">Second Word:</label>
             <input type="text" id="secondWord" placeholder="Enter the second word"
-                   class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
+ class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
+ <button class="clearButton absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 hover:text-gray-800 focus:outline-none" style="top: 50%; transform: translateY(-50%); right: 10px;">
+ <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+ <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd" />
+ </svg>
+ </button>
         </div>
 
         <!-- Button to perform sandhi operation -->
         <button id="combineButton"
                 class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
             Combine Words (Sandhi)
-            <span id="loadingIndicator" class="loader hidden"></span>
         </button>
 
         <!-- Display area for the sandhi result -->
-        <div id="resultContainer" class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden fade-in">
+        <div id="resultContainer" class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden fade-in relative">
+            <!-- Loading indicator -->
+            <div id="loadingIndicator" class="loader hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
             <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result:</p>
             <p id="sandhiResult" class="text-2xl font-extrabold text-blue-800 break-words mb-4"></p>
 
             <!-- New element for Sandhi Meaning -->
-            <p class="text-gray-700 text-sm font-semibold mb-2">Meaning (English):</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">English Meaning:</p>
             <p id="sandhiMeaning" class="text-lg text-gray-700 break-words mb-4"></p>
 
-            <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Type:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">Type of Sandhi:</p>
             <p id="sandhiType" class="text-lg text-gray-700 break-words mb-4"></p>
 
             <p class="text-gray-700 text-sm font-semibold mb-2">Ashtadhyayi Sutra Name:</p>
@@ -84,13 +95,12 @@
             <p class="text-gray-700 text-sm font-semibold mb-2">Ashtadhyayi Sutra Number:</p>
             <p id="sutraNumber" class="text-lg text-gray-700 break-words"></p>
 
-            <!-- Copy to clipboard button -->
+<!-- Copy to clipboard button -->
             <button id="copyButton"
                     class="mt-4 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
                 Copy Result
             </button>
         </div>
-
         <!-- Message box for errors or important info -->
         <div id="messageBox" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm" role="alert">
             <!-- Messages will be displayed here -->
@@ -108,9 +118,10 @@
         const sutraNameDisplay = document.getElementById('sutraName');
         const sutraNumberDisplay = document.getElementById('sutraNumber');
         const resultContainer = document.getElementById('resultContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const clearButtons = document.querySelectorAll('.clearButton');
         const copyButton = document.getElementById('copyButton');
         const messageBox = document.getElementById('messageBox');
-        const loadingIndicator = document.getElementById('loadingIndicator');
 
         /**
          * Displays a message in the message box.
@@ -147,9 +158,12 @@
         async function performSandhi(word1, word2) {
             loadingIndicator.classList.remove('hidden'); // Show loader
             combineButton.disabled = true; // Disable button
+            messageBox.classList.add('hidden'); // Hide any previous messages
             resultContainer.classList.add('hidden'); // Hide results while calculating
 
             try {
+                showMessage("Performing sandhi operation...", "info");
+
                 let chatHistory = [];
                 // Prompt the LLM to act as a sandhi calculator and return JSON
                 const prompt = `Perform Sanskrit sandhi for the words "${word1}" and "${word2}". Provide the combined sandhi word, its English meaning, the type of sandhi (e.g., Vowel Sandhi, Consonant Sandhi, Visarga Sandhi), and if applicable, the Ashtadhyayi Sutra name and number that governs this sandhi. Return the response in a JSON object with keys "sandhiResult", "sandhiMeaning", "sandhiType", "sutraName", and "sutraNumber". If a sutra or meaning is not directly applicable or known, use "N/A" for its values. Do not include any other text or explanation outside the JSON.`;
@@ -172,7 +186,7 @@
                         }
                     }
                 };
-                const apiKey = "YOUR_API_KEY"; // Canvas will provide this in runtime
+                const apiKey = "YOUR_API_KEY" ; // Canvas will provide this in runtime
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -220,12 +234,7 @@
             const firstWord = firstWordInput.value.trim();
             const secondWord = secondWordInput.value.trim();
 
-            if (!firstWord || !secondWord) {
-                sandhiResultDisplay.textContent = "";
-                sandhiMeaningDisplay.textContent = "";
-                sandhiTypeDisplay.textContent = "";
-                sutraNameDisplay.textContent = "";
-                sutraNumberDisplay.textContent = "";
+            if (!firstWord || !secondWord) { // Input validation
                 resultContainer.classList.add('hidden'); // Hide results
                 showMessage("Please enter both words to perform sandhi.", "error");
                 return;
@@ -235,8 +244,6 @@
             sandhiMeaningDisplay.textContent = "";
             sandhiTypeDisplay.textContent = "";
             sutraNameDisplay.textContent = "";
-            sutraNumberDisplay.textContent = "";
-            showMessage("Performing sandhi operation...", "info");
 
             const result = await performSandhi(firstWord, secondWord);
 
@@ -293,6 +300,16 @@
             // Tailwind CSS classes handle most responsiveness directly.
             // No additional JS needed here unless for specific complex responsive logic.
         });
+
+        // Add event listeners for clear buttons
+        clearButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                 const inputField = button.parentElement.querySelector('input[type="text"]');
+                    inputField.value = '';
+                    inputField.focus(); // Set focus back to the cleared input
+                }
+            , { passive: true });
+        });
     </script>
 </body>
-</html>
+</html>`
