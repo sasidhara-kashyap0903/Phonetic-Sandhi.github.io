@@ -39,11 +39,7 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        #sandhiResult {
-            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
-        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
     <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
@@ -83,9 +79,11 @@
         <div id="resultContainer" class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden fade-in relative">
             <!-- Loading indicator -->
             <div id="loadingIndicator" class="loader hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
-            <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result (Sanskrit):</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result:</p>
             <p id="sandhiResult" class="text-2xl font-extrabold text-blue-800 break-words mb-4"></p>
-            <p class="text-gray-700 text-sm font-semibold mb-2">Meaning (English):</p>
+
+            <!-- New element for Sandhi Meaning -->
+            <p class="text-gray-700 text-sm font-semibold mb-2">English Meaning:</p>
             <p id="sandhiMeaning" class="text-lg text-gray-700 break-words mb-4"></p>
 
             <p class="text-gray-700 text-sm font-semibold mb-2">Type of Sandhi:</p>
@@ -169,7 +167,25 @@
                 let chatHistory = [];
                 // Prompt the LLM to act as a sandhi calculator and return JSON
                 const prompt = `Perform Sanskrit sandhi for the words "${word1}" and "${word2}". Provide the combined sandhi word, its English meaning, the type of sandhi (e.g., Vowel Sandhi, Consonant Sandhi, Visarga Sandhi), and if applicable, the Ashtadhyayi Sutra name and number that governs this sandhi. Return the response in a JSON object with keys "sandhiResult", "sandhiMeaning", "sandhiType", "sutraName", and "sutraNumber". If a sutra or meaning is not directly applicable or known, use "N/A" for its values. Do not include any other text or explanation outside the JSON.`;
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                
+                // Few-shot examples to guide the model on the expected output format,
+                // especially for the sutraName in Sanskrit transliteration.
+                const examples = [
+                    {
+                        input: { word1: "maha", word2: "rishi" },
+                        output: { "sandhiResult": "maharṣi", "sandhiMeaning": "great sage", "sandhiType": "Vowel Sandhi", "sutraName": "Ad guṇaḥ", "sutraNumber": "6.1.87" }
+                    },
+                    {
+                        input: { word1: "iti", word2: "ādi" },
+                        output: { "sandhiResult": "ityādi", "sandhiMeaning": "and so on, et cetera", "sandhiType": "Vowel Sandhi", "sutraName": "Iko yaṇaci", "sutraNumber": "6.1.77" }
+                    },
+                     {
+                        input: { word1: "ramā", word2: "īśa" },
+                        output: { "sandhiResult": "rameśa", "sandhiMeaning": "lord of Ramā (Vishnu)", "sandhiType": "Vowel Sandhi", "sutraName": "Ād guṇaḥ", "sutraNumber": "6.1.87" }
+                    }
+                ];
+
+                chatHistory.push({ role: "user", parts: [{ text: prompt + "\n\nHere are some examples:\n\n" + examples.map(ex => `Input: ${JSON.stringify(ex.input)}\nOutput: ${JSON.stringify(ex.output)}`).join("\n\n") }] });
 
                 const payload = {
                     contents: chatHistory,
