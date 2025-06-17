@@ -201,22 +201,12 @@
 
 
                 const payload = {
-                    contents: chatHistory,
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                "sandhiResult": { "type": "STRING" },
-                                "sandhiMeaning": { "type": "STRING" },
-                                "sandhiType": { "type": "STRING" },
-                                "sutraName": { "type": "STRING" },
-                                "sutraNumber": { "type": "STRING" }
-                            },
-                            "propertyOrdering": ["sandhiResult", "sandhiMeaning", "sandhiType", "sutraName", "sutraNumber"]
-                        }
-                    }
-                };
+                    contents: [{
+                        parts: [{
+                            text: prompt + "\n\nHere are some examples:\n\n" + examples.map(ex => `Input: ${JSON.stringify(ex.input)}\nOutput: ${JSON.stringify(ex.output)}`).join("\n\n")
+                        }]
+                    }],
+                    generationConfig: {responseMimeType: "application/json"} };
                 const apiKey = "AIzaSyBetJYG7cFgFjYFyPuqGYbfpHTdxPUObgg" ; // Canvas will provide this in runtime
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
