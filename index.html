@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sandhi Word Combiner</title>
+    <title>सन्धि शब्द संयोजकम्</title>
     <!-- Tailwind CSS for responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -39,46 +39,48 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Style for footer to stick to the bottom */
+        body {
+ display: flex;
+ flex-direction: column;
+        }
+ footer {
+ margin-top: auto; /* Pushes the footer to the bottom */
+        }
     </style>
 </head>
+<div class="flex justify-center items-center pt-4">
+    <img src="/download.png" alt="Logo" class="h-12"> <!-- Placeholder logo -->
+</div>
 <body class="flex items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
     <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Sandhi Word Combiner</h1>
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">सन्धि शब्द संयोजकम्</h1>
 
         <!-- Input for the first word -->
         <div class="mb-4">
-            <label for="firstWord" class="block text-gray-700 text-sm font-semibold mb-2">First Word:</label>
-            <input type="text" id="firstWord" placeholder="Enter the first word"
+            <label for="firstWord" class="block text-gray-700 text-sm font-semibold mb-2">प्रथमं पदम्:</label>
+            <input type="text" id="firstWord" placeholder="प्रथमं पदं लिखन्तु"
  class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
- <button class="clearButton absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 hover:text-gray-800 focus:outline-none" style="top: 50%; transform: translateY(-50%); right: 10px;">
- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
- <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd" />
- </svg>
- </button>
         </div>
 
         <!-- Input for the second word -->
         <div class="mb-6">
-            <label for="secondWord" class="block text-gray-700 text-sm font-semibold mb-2">Second Word:</label>
-            <input type="text" id="secondWord" placeholder="Enter the second word"
+            <label for="secondWord" class="block text-gray-700 text-sm font-semibold mb-2">द्वितीयं पदम्:</label>
+            <input type="text" id="secondWord" placeholder="द्वितीयं पदं लिखन्तु"
  class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out">
- <button class="clearButton absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 hover:text-gray-800 focus:outline-none" style="top: 50%; transform: translateY(-50%); right: 10px;">
- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
- <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd" />
- </svg>
- </button>
         </div>
 
         <!-- Button to perform sandhi operation -->
         <button id="combineButton"
                 class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center">
-            Combine Words (Sandhi)
+                पदानां सन्धिं कुरुत
         </button>
 
         <!-- Display area for the sandhi result -->
         <!-- Chat History Section -->
         <div class="mt-8 mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">Chat History</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">संवाद इतिहासः</h2>
             <div id="chatHistory" class="space-y-4 max-h-60 overflow-y-auto">
                 <!-- Chat messages will be appended here -->
             </div>
@@ -88,26 +90,26 @@
         <div id="resultContainer" class="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200 hidden fade-in relative">
             <!-- Loading indicator -->
             <div id="loadingIndicator" class="loader hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
-            <p class="text-gray-700 text-sm font-semibold mb-2">Sandhi Result:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">सन्धि परिणामः:</p>
             <p id="sandhiResult" class="text-2xl font-extrabold text-blue-800 break-words mb-4"></p>
 
             <!-- New element for Sandhi Meaning -->
-            <p class="text-gray-700 text-sm font-semibold mb-2">English Meaning:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">आङ्ग्ल भाषायां अर्थः:</p>
             <p id="sandhiMeaning" class="text-lg text-gray-700 break-words mb-4"></p>
 
-            <p class="text-gray-700 text-sm font-semibold mb-2">Type of Sandhi:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">सन्धिप्रकारः:</p>
             <p id="sandhiType" class="text-lg text-gray-700 break-words mb-4"></p>
 
-            <p class="text-gray-700 text-sm font-semibold mb-2"> Ashtadhyayi Sutra Name:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">अष्टाध्यायी सूत्र नाम:</p>
             <p id="sutraName" class="text-lg text-gray-700 break-words mb-4"></p>
 
-            <p class="text-gray-700 text-sm font-semibold mb-2">Ashtadhyayi Sutra Number:</p>
+            <p class="text-gray-700 text-sm font-semibold mb-2">अष्टाध्यायी सूत्र संख्या:</p>
             <p id="sutraNumber" class="text-lg text-gray-700 break-words"></p>
 
 <!-- Copy to clipboard button -->
             <button id="copyButton"
                     class="mt-4 w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50">
-                Copy Result
+                परिणामं प्रतिलिपिं करोतु
             </button>
         </div>
         <!-- Message box for errors or important info -->
@@ -172,7 +174,7 @@
             resultContainer.classList.add('hidden'); // Hide results while calculating
 
             try {
-                showMessage("Performing sandhi operation...", "info");
+                showMessage("सन्धि प्रक्रिया चलति...", "info");
 
                 // Prompt the LLM to act as a sandhi calculator and return JSON
                 const prompt = `Perform Sanskrit sandhi for the words "${word1}" and "${word2}". Provide the combined sandhi word, its English meaning, the type of sandhi (e.g., Vowel Sandhi, Consonant Sandhi, Visarga Sandhi), and if applicable, the Ashtadhyayi Sutra name and number that governs this sandhi. Return the response in a JSON object with keys "sandhiResult", "sandhiMeaning", "sandhiType", "sutraName", and "sutraNumber". If a sutra or meaning is not directly applicable or known, use "N/A" for its values. Do not include any other text or explanation outside the JSON.`;
@@ -237,7 +239,7 @@
 
                     return { sandhiResult, sandhiMeaning, sandhiType, sutraName, sutraNumber };
                 } else {
-                    showMessage('Unexpected response structure from the sandhi service.', 'error');
+                    showMessage('सन्धि सेवायाम् अप्रत्याशितः प्रतिचारः।', 'error');
                     return { sandhiResult: 'Error', sandhiMeaning: 'N/A', sandhiType: 'N/A', sutraName: 'N/A', sutraNumber: 'N/A' };
                 }
 
@@ -259,7 +261,7 @@
 
             if (!firstWord || !secondWord) { // Input validation
                 resultContainer.classList.add('hidden'); // Hide results
-                showMessage("Please enter both words to perform sandhi.", "error");
+                showMessage("सन्धिं कर्तुं कृपया उभयपदे लिखन्तु।", "error");
                 return;
             }
 
@@ -286,7 +288,7 @@
                 sutraNumberDisplay.textContent = result.sutraNumber;
                 resultContainer.classList.remove('hidden'); // Show container
                 resultContainer.classList.add('fade-in');
-                showMessage("Sandhi operation completed!", "success");
+                showMessage("सन्धि प्रक्रिया पूर्णा जाता!", "success");
                 // Append interaction to chat history
                 appendChatHistory(firstWord, secondWord, result);
             }
@@ -309,14 +311,14 @@
                 textarea.select();
                 try {
                     document.execCommand('copy');
-                    showMessage('Result and details copied to clipboard!', 'success');
+                    showMessage('परिणामः विवरणैः सह प्रतिलिपीकृतः!', 'success');
                 } catch (err) {
                     console.error('Failed to copy text:', err);
-                    showMessage('Failed to copy. Please copy manually.', 'error');
+                    showMessage('प्रतिलिपिः न कृता। कृपया स्वयं प्रतिलिपिं करोतु।', 'error');
                 }
                 document.body.removeChild(textarea);
             } else {
-                showMessage('No result to copy.', 'info');
+                showMessage('प्रतिलिपिं कर्तुं परिणामः नास्ति।', 'info');
             }
         });
 
@@ -324,16 +326,6 @@
         window.addEventListener('load', () => {
             // Tailwind CSS classes handle most responsiveness directly.
             // No additional JS needed here unless for specific complex responsive logic.
-        });
-
-        // Add event listeners for clear buttons
-        clearButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                 const inputField = button.parentElement.querySelector('input[type="text"]');
-                    inputField.value = '';
-                    inputField.focus(); // Set focus back to the cleared input
-                }
-            , { passive: true });
         });
 
         /**
@@ -356,5 +348,8 @@
             chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Scroll to the bottom
         }
     </script>
+    <footer class="mt-8 text-center text-gray-600 text-sm">
+        <p><strong>© २०२५ सन्धि शब्द संयोजकम् ससिधरकश्यपेन | सर्वाधिकार सुरक्षित।</strong></p>
+    </footer>
 </body>
 </html>`
